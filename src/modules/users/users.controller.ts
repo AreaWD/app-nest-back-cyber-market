@@ -1,14 +1,11 @@
-import { Body, Controller, Post, UsePipes, ValidationPipe } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 
+import { UsersService } from './users.service';
+import { ApiTags } from '@nestjs/swagger';
+import { Controller } from '@nestjs/common';
+
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  @UsePipes(new ValidationPipe())
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
 }
