@@ -1,0 +1,174 @@
+// ERDL Model for the Database
+
+User
+-
+id uuid PK
+email varchar(255) UNIQUE NOT NULL
+password varchar(255) NOT NULL
+createAt timestamp NOT NULL
+updateAt timestamp NOT NULL
+UserProfileID int FK > UserProfile.UserProfileID
+RoleID int FK > Role.id
+
+UserProfile
+-
+UserProfileID int PK
+UserID int FK > User.id
+FirstName varchar(100)
+LastName varchar(100)
+Phone varchar(20)
+BirthDate date
+Gender varchar(10)
+
+Role
+-
+id int PK
+name varchar(100) UNIQUE
+
+Review
+-
+ReviewID int PK
+ProductID int FK > Product.ProductID
+UserID int FK > User.id
+Rating int
+Comment text
+CreatedAt timestamp NOT NULL
+
+Product
+-
+ProductID int PK
+Name varchar(255)
+Description text
+Price decimal(10, 2)
+Stock int
+CategoryID int FK > Category.id
+ManufacturerID int FK > Manufacturer.ManufacturerID
+CreatedAt timestamp NOT NULL
+UpdatedAt timestamp NOT NULL
+
+Category
+-
+id int PK
+name varchar(100)
+
+Manufacturer
+-
+ManufacturerID int PK
+Name varchar(255) NOT NULL
+Country varchar(100)
+Website varchar(255)
+
+Order
+-
+OrderID int PK
+UserID int FK > User.id
+OrderDate timestamp NOT NULL
+StatusID int FK > PaymentStatus.StatusID
+TotalAmount decimal(10, 2)
+ShippingAddress text
+
+OrderItem
+-
+OrderItemID int PK
+OrderID int FK > Order.OrderID
+ProductID int FK > Product.ProductID
+Quantity int
+Price decimal(10, 2)
+
+PaymentStatus
+-
+StatusID int PK
+StatusName varchar(50)
+
+// SQL Queries for Table Creation
+
+CREATE TABLE User (
+    id UUID PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    createAt TIMESTAMP NOT NULL,
+    updateAt TIMESTAMP NOT NULL,
+    UserProfileID INT,
+    RoleID INT,
+    FOREIGN KEY (UserProfileID) REFERENCES UserProfile(UserProfileID),
+    FOREIGN KEY (RoleID) REFERENCES Role(id)
+);
+
+CREATE TABLE UserProfile (
+    UserProfileID INT PRIMARY KEY,
+    UserID INT,
+    FirstName VARCHAR(100),
+    LastName VARCHAR(100),
+    Phone VARCHAR(20),
+    BirthDate DATE,
+    Gender VARCHAR(10),
+    FOREIGN KEY (UserID) REFERENCES User(id)
+);
+
+CREATE TABLE Role (
+    id INT PRIMARY KEY,
+    name VARCHAR(100) UNIQUE
+);
+
+CREATE TABLE Review (
+    ReviewID INT PRIMARY KEY,
+    ProductID INT,
+    UserID INT,
+    Rating INT,
+    Comment TEXT,
+    CreatedAt TIMESTAMP NOT NULL,
+    FOREIGN KEY (ProductID) REFERENCES Product(ProductID),
+    FOREIGN KEY (UserID) REFERENCES User(id)
+);
+
+CREATE TABLE Product (
+    ProductID INT PRIMARY KEY,
+    Name VARCHAR(255),
+    Description TEXT,
+    Price DECIMAL(10, 2),
+    Stock INT,
+    CategoryID INT,
+    ManufacturerID INT,
+    CreatedAt TIMESTAMP NOT NULL,
+    UpdatedAt TIMESTAMP NOT NULL,
+    FOREIGN KEY (CategoryID) REFERENCES Category(id),
+    FOREIGN KEY (ManufacturerID) REFERENCES Manufacturer(ManufacturerID)
+);
+
+CREATE TABLE Category (
+    id INT PRIMARY KEY,
+    name VARCHAR(100)
+);
+
+CREATE TABLE Manufacturer (
+    ManufacturerID INT PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL,
+    Country VARCHAR(100),
+    Website VARCHAR(255)
+);
+
+CREATE TABLE [Order] (
+    OrderID INT PRIMARY KEY,
+    UserID INT,
+    OrderDate TIMESTAMP NOT NULL,
+    StatusID INT,
+    TotalAmount DECIMAL(10, 2),
+    ShippingAddress TEXT,
+    FOREIGN KEY (UserID) REFERENCES User(id),
+    FOREIGN KEY (StatusID) REFERENCES PaymentStatus(StatusID)
+);
+
+CREATE TABLE OrderItem (
+    OrderItemID INT PRIMARY KEY,
+    OrderID INT,
+    ProductID INT,
+    Quantity INT,
+    Price DECIMAL(10, 2),
+    FOREIGN KEY (OrderID) REFERENCES [Order](OrderID),
+    FOREIGN KEY (ProductID) REFERENCES Product(ProductID)
+);
+
+CREATE TABLE PaymentStatus (
+    StatusID INT PRIMARY KEY,
+    StatusName VARCHAR(50)
+);

@@ -28,6 +28,8 @@ import { OrderItem } from './db/entities/order-item.entity';
         database: configService.getOrThrow<string>('DB_DATABASE'),
         entities: ['./dist/db/entities/*.{ts,js}', Role, UserProfile, Category, Product, PaymentStatus, Order, OrderItem],
         synchronize: true,
+        retryAttempts: 10,
+        retryDelay: 3000,
       }),
       inject: [ConfigService],
     }),

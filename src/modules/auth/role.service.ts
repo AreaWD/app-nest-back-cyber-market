@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Role } from '../../db/entities/role.entity';
-import { seedCategories } from 'src/db/seeds/category.seed';
 
 @Injectable()
 export class RoleService {
@@ -22,6 +21,5 @@ export class RoleService {
       }
     }
 
-    await seedCategories()
   }
 }

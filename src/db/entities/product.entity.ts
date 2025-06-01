@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { Category } from './category.entity';
+import { Manufacturer } from './manufacturer.entity';
+import { Review } from './review.entity';
 
 @Entity()
 export class Product {
@@ -21,6 +23,9 @@ export class Product {
   @Column()
   CategoryID: number;
 
+  @Column()
+  ManufacturerID: number;
+
   @CreateDateColumn()
   CreatedAt: Date;
 
@@ -30,4 +35,11 @@ export class Product {
   @ManyToOne(() => Category, category => category.products)
   @JoinColumn({ name: 'CategoryID' })
   category: Category;
+
+  @ManyToOne(() => Manufacturer, manufacturer => manufacturer.products)
+  @JoinColumn({ name: 'ManufacturerID' })
+  manufacturer: Manufacturer;
+
+  @OneToMany(() => Review, review => review.product)
+  reviews: Review[];
 }

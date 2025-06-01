@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { UserProfile } from './user-profile.entity';
 import { Role } from './role.entity';
+import { Review } from './review.entity';
 
 @Entity()
 export class User {
@@ -24,4 +25,7 @@ export class User {
 
   @ManyToOne(() => Role, role => role.users)
   role: Role;
+
+  @OneToMany(() => Review, review => review.user)
+  reviews: Review[];
 }
